@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>雪花</title>
+	<style>
+		*{padding: 0;margin: 0;}
+		html,body{
+			width: 100%;height: 100%;
+		}
+		canvas{
+			/*position: absolute;*/
+			background: #111;
+			vertical-align: middle;
+			/*width: 100%;height: 100%;*/
+		}
+	</style>
+</head>
+<body>
+	<canvas id="cavs" width="" height="">
+		你的浏览器不支持，请换更高版本的浏览器
+	</canvas>
+	<script type="text/javascript">
+		var ctx=cavs.getContext('2d');//绘图环境
+		//用js获取浏览器的宽高，设置canvas宽高，防止画图变形
+		var w = cavs.width = window.innerWidth;
+		var h = cavs.height = window.innerHeight;
+		window.onresize=function(){//监听窗口
+			w = cavs.width = window.innerWidth;
+		    h = cavs.height = window.innerHeight;
+		    ctx.fillStyle = 'white';
+		}
+		//绘制一个矩形，ctx.fill()填充方法，实心的
+		//ctx.stroke（）触笔方法  空心
+		/*ctx.fillStyle = 'red';
+		ctx.fillRect(50,50,50,50);//x,y 坐标，w,h宽高
+		ctx.strokeStyle = 'red';//空心
+		ctx.strokeRect(150,150,50,50);
+		
+		//xy圆心的坐标  r半径   0-2PI(绘制正圆)   false逆时针绘制
+		//ctx.arc(x,y,r,0,Math.PI*2,false);
+		ctx.fillStyle = 'blue';
+		ctx.arc(250,250,50,0,Math.PI*2,false);
+		ctx.strokeStyle = 'white';
+		ctx.stroke();
+		ctx.fill();*/
+		//动画原理
+		/*var y =0;
+		ctx.fillStyle = 'red';//填充颜色
+		setInterval(()=>{
+			y++;
+			ctx.clearRect(0,0,w,h);//清空画布xywh
+			ctx.beginPath();//开始路径，就是边画边擦。（提笔再重新落笔）
+			ctx.arc(250,y,20,0,Math.PI*2,false);
+			ctx.fill();
+		},30)*/
+		
+	var num = 1000;//雪花个数
+	ctx.fillStyle = 'white';
+	var points = [];//保存各圆坐标及半径
+	for(let i=0;i<num;i++){
+		points.push({
+			x: Math.random()*w,
+			y: Math.random()*h,
+			r: Math.random()*5,
+		})
+		//console.log(points[i].y)
+		//y.push(Math.random()*h)
+	};
+	//ctx.fill();
+function draw(){//重新绘制
+	ctx.clearRect(0,0,w,h);//清除-擦canvas画板	
+	ctx.beginPath();//边擦边画
+	for(var i=0;i<num;i++){
+		var p = points[i];//解决y轴值为NaN问题
+		 ctx.moveTo(p.x, p.y);//清除填充
+		ctx.arc(p.x,p.y,p.r,0,Math.PI*2,false);   //ctx.arc(x,y,r,0,Math.PI*2,false);
+		
+	}
+	 ctx.fill();
+	update();//绘制完成更新坐标
+    ctx.closePath();
+}
+
+	//更新坐标-雪花飘落
+function update(){
+	  for (var i = 0; i < num; i++) {
+        var p = points[i];
+        p.y += Math.random() * 2+0;
+        if (p.y > h) {
+            p.y = 0;
+        }
+        p.x += Math.random() * 2+0 ;//倾斜飘落
+        if (p.x > w) {
+            p.x = 0;
+        }
+	 }
+}
+setInterval(draw,30);
+//function draw(){//重新绘制
+//	ind ++;
+//	//ctx.clearRect(0,0,w,h);//清除-擦canvas画板
+//	for(var i=0;i<num;i++){
+////		var x=Math.random()*w;//0-w
+////		var y=Math.random()*h;//0-h
+////		var r=Math.random()*5;//0-5  r
+//		ctx.beginPath();
+//		//ctx.arc(x,y,r,0,Math.PI*2,false);
+//		ctx.arc(points[i].x,points[i].y,points[i].r,0,Math.PI*2,false);
+//		ctx.fill();
+//		//绘制完成更新坐标
+//		update();
+//	}
+//	console.log(points[ind].y)
+//}		
+		
+/*玄武老师
+1046  771
+玄武老师
+300 15 
+玄武老师
+300 150  canvas默认wh
+50 * 3.5 =260;
+* */
+		
+	</script>
+</body>
+</html>
